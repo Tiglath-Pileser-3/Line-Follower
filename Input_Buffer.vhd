@@ -35,6 +35,5 @@ process(clk,reset)
 		sensor_out <= ffq2;
 
 end process;
---3 bit register als component maken, dan structurally verbinden
 
 end architecture behaviour;
