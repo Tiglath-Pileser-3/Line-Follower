@@ -19,7 +19,9 @@ begin
 	clk_in_TB	<=	'0'	after 0 ns,
 				'1'	after 10 ns when clk_in_TB = '0' else '0' after 10 ns;
 	reset_TB	<=	'1'	after 0 ns,
-				'0' 	after 50 ns;
+				'0' 	after 50 ns,
+				'1'	after 20000050 ns,
+				'0'	after 20000070 ns;
 
 
 
