@@ -36,10 +36,7 @@ begin
 --state actions
 	process (state, sensor)
 	begin
-		case state is
 
-			--the state that determines the direction
-			when reset =>
 				case sensor is
 					when "000" =>
 						new_state <= forward;
@@ -61,19 +58,26 @@ begin
 						new_state <= reset;
 				end case;
 
+		case state is
+
+			--the state that determines the direction
+			when reset =>
+				direction_left <= '0';
+				direction_right <= '0';
+
 			--the states that determine the directions for the Motor_Controls
 			when forward =>
 				direction_left <= '1';
-				direction_right <= '1';
+				direction_right <= '0';
 			when gentle_left =>
-				direction_left <= '1';
+				direction_left <= '0';
 				direction_right <= '1';
 			when gentle_right =>
 				direction_left <= '1';
-				direction_right <= '1';
+				direction_right <= '0';
 			when sharp_left =>
-				direction_left <= '1';
-				direction_right <= '1';
+				direction_left <= '0';
+				direction_right <= '0';
 			when sharp_right =>
 				direction_left <= '1';
 				direction_right <= '1';
