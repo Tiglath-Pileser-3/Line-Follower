@@ -1,4 +1,5 @@
 library ieee;
+library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
@@ -7,7 +8,9 @@ entity Controller is
 		reset_in	: in	std_logic;
 		counter		: in	std_logic_vector(19 downto 0);	--from the Timebass
 		sensor		: in  	std_logic_vector(2 downto 0);	--from the Input_Buffer
-		reset_out	: out	std_logic;			--fires every 20 ms, determined by counter	to the 2 Motor_Controls and Timebass
+		reset_time	: out	std_logic;			--fires every 20 ms, determined by counter	to the Timebass
+		reset_left	: out	std_logic;			--to the left Motor_Control, used to stop the motor
+		reset_right	: out	std_logic;			--to the right Motor_Control, used to stop the motor
 		direction_left	: out	std_logic;			--to the left Motor_Control
 		direction_right : out   std_logic);			--to the right Motor_Control
 
@@ -24,7 +27,7 @@ begin
 	process (clk, reset_in)
 	begin
 		if (reset_in = '1') then
-			reset_out <= '1';
+			reset_time <= '1';		--why is this one not executed????
 			state <= reset;
 		
 		elsif (rising_edge(clk)) then
@@ -36,7 +39,12 @@ begin
 --state actions
 	process (state, sensor)
 	begin
+		case state is
 
+			--the state that determines the direction
+			when reset =>
+				reset_left <= '1';
+				reset_right <= '1';
 				case sensor is
 					when "000" =>
 						new_state <= forward;
@@ -58,36 +66,33 @@ begin
 						new_state <= reset;
 				end case;
 
-		case state is
-
-			--the state that determines the direction
-			when reset =>
-				direction_left <= '0';
-				direction_right <= '0';
-
 			--the states that determine the directions for the Motor_Controls
 			when forward =>
+				reset_left <= '0';
+				reset_right <= '0';
 				direction_left <= '1';
-				direction_right <= '0';
+				direction_right <= '1';
 			when gentle_left =>
-				direction_left <= '0';
+				reset_left <= '1';
+				reset_right <= '0';
 				direction_right <= '1';
 			when gentle_right =>
+				reset_left <= '0';
+				reset_right <= '1';
 				direction_left <= '1';
-				direction_right <= '0';
 			when sharp_left =>
 				direction_left <= '0';
-				direction_right <= '0';
+				direction_right <= '1';
 			when sharp_right =>
 				direction_left <= '1';
-				direction_right <= '1';
+				direction_right <= '0';
 			when others =>
 				new_state <= reset;
 		end case;
 		
-	--sends reset signal to timebass(reset counting) and motor_control(new pulse) and determines new direction
+	--sends reset signal to timebass(reset counting) and determines new direction
 	if (unsigned(counter)=20000000) then
-		reset_out <= '1';
+		reset_time <= '1';			--why is this one not executed???
 		new_state <= reset;
 	end if;
 
