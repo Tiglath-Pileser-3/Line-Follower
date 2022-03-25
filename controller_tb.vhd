@@ -42,8 +42,8 @@ clk		<= 	'0' 	after 0 ns,
 
 reset_in	<=	'1'	after 0 ns,
 			'0'	after 80 ns,
-			'1'	after 500 ns,		--test!!!!
-			'0'	after 600 ns;
+			'1'	after 150 ns,
+			'0'	after 200 ns;		--doesn't affect the counting yet, because reset_time is not fired :(
 
 sensor		<=	"000"	after 0 ns,		--forward
 			"001"	after 20 ns,		--testing the reset_in
@@ -54,7 +54,8 @@ sensor		<=	"000"	after 0 ns,		--forward
 			"100"	after 480 ns,		--gentle right
 			"101"	after 580 ns,		--forward
 			"110"	after 680 ns,		--sharp right
-			"111"	after 780 ns;		--forward
+			"111"	after 780 ns,		--forward
+			"110"	after 1000 ns;		--test
 
 lbl0: Controller port map(	clk			=>	clk	,	
 				reset_in		=>	reset_in,
