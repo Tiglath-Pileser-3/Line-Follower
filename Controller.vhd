@@ -27,7 +27,6 @@ begin
 	process (clk, reset_in)
 	begin
 		if (reset_in = '1') then
-			reset_time <= '1';		--why is this one not executed????
 			--direction_left <= '0';	--test, does not give direction_left a value (u) when reset_in=1, but makes direction_left give 'x' when reset_in=0?????
 			state <= reset;			--this one seems to do work
 		
@@ -46,6 +45,7 @@ begin
 			when reset =>
 				reset_left <= '1';
 				reset_right <= '1';
+				reset_time <= '1';
 				case sensor is
 					when "000" =>
 						new_state <= forward;
@@ -73,26 +73,32 @@ begin
 				reset_right <= '0';
 				direction_left <= '1';
 				direction_right <= '1';
+				reset_time<='0';
 			when gentle_left =>
 				reset_left <= '1';
 				reset_right <= '0';
 				direction_right <= '1';
+				reset_time<='0';
 			when gentle_right =>
 				reset_left <= '0';
 				reset_right <= '1';
 				direction_left <= '1';
+				reset_time<='0';
 			when sharp_left =>
 				reset_left <= '0';
 				reset_right <= '0';
 				direction_left <= '0';
 				direction_right <= '1';
+				reset_time<='0';
 			when sharp_right =>
 				reset_left <= '0';
 				reset_right <= '0';
 				direction_left <= '1';
 				direction_right <= '0';
+				reset_time<='0';
 			when others =>
 				new_state <= reset;
+				reset_time<='0';
 		end case;
 
 	--sends reset signal to timebass(reset counting) and determines new direction
