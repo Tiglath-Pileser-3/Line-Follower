@@ -1,3 +1,8 @@
+------------------------------------------------------------------------------
+--Created by Simon Schaap and Ruben Dirkzwager for EE1D21 at TU Delft
+--Please do not copy or replicate this code without permission of the creators
+------------------------------------------------------------------------------
+
 library ieee;
 library ieee;
 use ieee.std_logic_1164.all;
@@ -68,15 +73,15 @@ begin
 
 			--the states that determine the directions for the Motor_Controls
 			when forward =>
-				reset_left <= '0';
+				reset_left <= '0';		--no reset, so motor will run
 				reset_right <= '0';
-				direction_left <= '1';
-				direction_right <= '1';
+				direction_left <= '1';		--opposed directions, because the motors
+				direction_right <= '0';		--are not mirrored.
 				reset_time<='0';
 			when gentle_left =>
-				reset_left <= '1';
+				reset_left <= '1';		--direction_left does not have to be set
 				reset_right <= '0';
-				direction_right <= '1';
+				direction_right <= '0';
 				reset_time<='0';
 			when gentle_right =>
 				reset_left <= '0';
@@ -87,13 +92,13 @@ begin
 				reset_left <= '0';
 				reset_right <= '0';
 				direction_left <= '0';
-				direction_right <= '1';
+				direction_right <= '0';
 				reset_time<='0';
 			when sharp_right =>
 				reset_left <= '0';
 				reset_right <= '0';
 				direction_left <= '1';
-				direction_right <= '0';
+				direction_right <= '1';
 				reset_time<='0';
 			when others =>
 				new_state <= reset;
