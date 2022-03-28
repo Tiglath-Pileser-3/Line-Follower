@@ -27,8 +27,7 @@ begin
 	process (clk, reset_in)
 	begin
 		if (reset_in = '1') then
-			--direction_left <= '0';	--test, does not give direction_left a value (u) when reset_in=1, but makes direction_left give 'x' when reset_in=0?????
-			state <= reset;			--this one seems to do work
+			state <= reset;			
 		
 		elsif (rising_edge(clk)) then
 			state <= new_state;
@@ -64,7 +63,7 @@ begin
 					when "111" =>
 						new_state <= forward;
 					when others =>
-						new_state <= reset;		--this one doesn't cause the problems
+						new_state <= reset;		
 				end case;
 
 			--the states that determine the directions for the Motor_Controls
@@ -102,7 +101,6 @@ begin
 		end case;
 
 	--sends reset signal to timebass(reset counting) and determines new direction
-
 	if (unsigned(counter)=1000000) then
 		reset_time <= '1';			
 		new_state <= reset;
