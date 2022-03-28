@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity motor_controller is
+entity Motor_control is
 	port( 	clk		: in	std_logic;
 		reset		: in	std_logic;
 		direction	: in	std_logic;
@@ -10,9 +10,9 @@ entity motor_controller is
 
 		pwm		: out	std_logic);
 
-end entity motor_controller;
+end entity Motor_control;
 
-architecture behavioural of motor_controller is
+architecture behavioural of Motor_control is
 
 	type motor_controller_state is ( motor_reset, motor_H, motor_L);
 
