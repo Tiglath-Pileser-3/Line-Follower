@@ -41,15 +41,26 @@ begin
 	end process;
 
 --state actions
-	process (clk, counter, state, sensor)
+	process (counter, state, sensor)
 	begin
-		case state is
 
+	--sends reset signal to timebass(reset counting) and determines new direction
+	if (unsigned(counter)=1000000) then
+		reset_time <= '1';
+		reset_left <= '1';
+		reset_right <= '1';
+		direction_left <= '0';
+		direction_right <= '0';
+		new_state <= reset;
+	else
+		case state is
 			--the state that determines the direction
 			when reset =>
 				reset_left <= '1';
 				reset_right <= '1';
 				reset_time <= '1';
+				direction_left <= '0';	--don't care
+				direction_right <= '0';
 				case sensor is
 					when "000" =>
 						new_state <= forward;
@@ -73,44 +84,49 @@ begin
 
 			--the states that determine the directions for the Motor_Controls
 			when forward =>
+				new_state <= forward;
 				reset_left <= '0';		--no reset, so motor will run
 				reset_right <= '0';
 				direction_left <= '1';		--opposed directions, because the motors
 				direction_right <= '0';		--are not mirrored.
-				reset_time<='0';
+				reset_time <= '0';
 			when gentle_left =>
+				new_state <= gentle_left;
 				reset_left <= '1';		--direction_left does not have to be set
 				reset_right <= '0';
 				direction_right <= '0';
-				reset_time<='0';
+				direction_left <= '0';
+				reset_time <= '0';
 			when gentle_right =>
+				new_state <= gentle_right;
 				reset_left <= '0';
 				reset_right <= '1';
+				direction_right <= '0';
 				direction_left <= '1';
-				reset_time<='0';
+				reset_time <= '0';
 			when sharp_left =>
+				new_state <= sharp_left;
 				reset_left <= '0';
 				reset_right <= '0';
 				direction_left <= '0';
 				direction_right <= '0';
-				reset_time<='0';
+				reset_time <= '0';
 			when sharp_right =>
+				new_state <= sharp_right;
 				reset_left <= '0';
 				reset_right <= '0';
 				direction_left <= '1';
 				direction_right <= '1';
-				reset_time<='0';
+				reset_time <= '0';
 			when others =>
 				new_state <= reset;
-				reset_time<='0';
+				reset_time <= '0';
+				reset_left <= '1';
+				reset_right <= '1';
+				direction_left <= '0';
+				direction_right <= '0';
 		end case;
-
-	--sends reset signal to timebass(reset counting) and determines new direction
-	if (unsigned(counter)=1000000) then
-		reset_time <= '1';			
-		new_state <= reset;
 	end if;
-
 	end process;
 
 end architecture behavioural;

@@ -44,10 +44,14 @@ begin
 				if (direction = '0') then	--direction counter clockwise
 					if (unsigned(count_in)=50000 ) then
 						new_state <= motor_L;
+					else
+						new_state <= motor_H;
 					end if;
 				elsif (direction = '1' ) then    --direction clockwise
 					if (unsigned(count_in)=100000 ) then
 						new_state <= motor_L;
+					else 
+						new_state <= motor_H;
 					end if;
 				else 				--if direction is not a 1/0
 					new_state <= motor_reset;
@@ -56,8 +60,12 @@ begin
 				pwm <= '0';
 				if (unsigned(count_in)=1000000) then
 					new_state <= motor_reset;
-				
+				else
+					new_state <= motor_L;
 				end if;
+			when others =>
+				pwm <= '0';
+				new_state <=motor_reset;
 		end case;
 	end process;
 end architecture behavioural;
