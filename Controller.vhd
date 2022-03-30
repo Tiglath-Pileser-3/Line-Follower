@@ -41,7 +41,7 @@ begin
 	end process;
 
 --state actions
-	process (clk, state, sensor)
+	process (clk, counter, state, sensor)
 	begin
 		case state is
 

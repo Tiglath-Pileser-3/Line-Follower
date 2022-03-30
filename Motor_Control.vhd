@@ -17,9 +17,10 @@ architecture behavioural of Motor_control is
 	type motor_controller_state is ( motor_reset, motor_H, motor_L);
 
 	signal state, new_state:	motor_controller_state;
+	
 begin
 
-	process (clk)
+	process (clk, reset)
 	begin
 		if (rising_edge(clk)) then
 			if (reset = '1' ) then
